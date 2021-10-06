@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/tailwind.css" rel="stylesheet">
+  <script src="//unpkg.com/alpinejs" defer></script>
+</head>
+
+<body>
+
+
+  <nav class="bg-blue-500" aria-label="Global">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center px-2 lg:px-0">
+          <div class="flex-shrink-0 flex items-center">
+            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-white.svg" alt="Workflow">
+          </div>
+          <div class="hidden lg:ml-8 lg:flex lg:space-x-4">
+            <a href="#" class="rounded-md py-2 px-3 text-sm font-medium text-white hover:bg-sky-400">
+              Dashboard
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu, show/hide based on menu state. -->
+    <div class="lg:hidden" id="mobile-menu">
+      <div class="pt-2 pb-3 px-2 space-y-1">
+        <a href="#"
+          class="block rounded-md py-2 px-3 text-base font-medium text-white hover:text-white hover:bg-sky-400">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-7xl mx-auto pt-10 pb-12 px-4 lg:pb-16" x-data="{ input: '', output: ''}">
+    <form>
+      <div class="grid grid-cols-3 gap-4">
+
+        <div>
+          <h1 class="text-lg leading-6 font-medium text-gray-900">
+            Input
+          </h1>
+          <p class="mt-1 text-sm text-gray-500">
+            The string to process
+          </p>
+          <div class="mt-1">
+            <textarea id="input" name="input" rows="20" x-model="input"
+              class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border border-gray-300 rounded-md"></textarea>
+          </div>
+        </div>
+
+        <div>
+          <h1 class="text-lg leading-6 font-medium text-gray-900">
+            Analysis
+          </h1>
+          <p class="mt-1 text-sm text-gray-500">
+            the frequency analysis of single characters
+          </p>
+          <div class="mt-1">
+            list <br />
+            is <br />
+            here <br />
+          </div>
+        </div>
+
+        <div>
+          <h1 class="text-lg leading-6 font-medium text-gray-900">
+            Output
+          </h1>
+          <p class="mt-1 text-sm text-gray-500">
+            The modified string
+          </p>
+          <div class="mt-1">
+            <textarea id="output" name="output" rows="20" x-model="input"
+              class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border border-gray-300 rounded-md"></textarea>
+          </div>
+        </div>
+
+        
+
+
+
+        <div>
+          <h1 class="text-lg leading-6 font-medium text-gray-900">
+            New Cipher Key
+          </h1>
+          <div class="mt-1">
+                <div class="flex space-x-2">
+                  <div class="flex-grow">
+                    <input type="text" name="new_input_key" id="new-input-key" x-model="newInputKey"
+                      class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
+                      placeholder="input">
+                  </div>
+                  <div class="flex-grow">
+                    <input type="text" name="new_output_key" id="new-output-key" x-model="newOutputKey"
+                      class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
+                      placeholder="output">
+                  </div>
+                  <span class="ml-3">
+                    <button type="button"
+                      class="bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                      <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                          clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </span>
+                </div>
+
+          </div>
+        </div>
+
+        <div>
+          <h1 class="text-lg leading-6 font-medium text-gray-900">
+            Current Keys
+          </h1>
+          <div class="mt-1">
+              <!-- For loop will go here -->
+                <div class="flex space-x-2">
+                  <div class="flex-grow">
+                    <input type="text" name="new_input_key" id="new-input-key" x-model="newInputKey"
+                      class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
+                      placeholder="input">
+                  </div>
+                  <div class="flex-grow">
+                    <input type="text" name="new_output_key" id="new-output-key" x-model="newOutputKey"
+                      class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
+                      placeholder="output">
+                  </div>
+                  <span class="ml-3">
+                    <button type="button"
+                      class="bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                      <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                          clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                  </span>
+                </div>
+                <!-- END FOR LOOP -->
+
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+      </div>
+    </form>
+  </main>
+
+
+</body>
+
+</html>

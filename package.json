@@ -1,0 +1,21 @@
+{
+  "name": "decrypt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "npx http-server ./public -p 8080",
+    "build": "npx tailwindcss -i ./src/tailwind.css -o ./public/tailwind.css"
+  },
+  "author": "David Hallin",
+  "license": "MIT",
+  "dependencies": {
+    "http-server": "^13.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.3.4",
+    "autoprefixer": "^10.3.7",
+    "postcss": "^8.3.9",
+    "tailwindcss": "^2.2.16"
+  }
+}
