@@ -331,7 +331,7 @@
           for (var i = 0; i < this.input.length; i++) {
             new_output += this.find_key(this.input.charAt(i).toLowerCase());
           }
-          this.output = new_output;
+          this.output = new_output.toUpperCase();
         },
         find_key(input) {
           if (input == " ") {
