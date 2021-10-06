@@ -6,21 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="/tailwind.css" rel="stylesheet">
   <script src="//unpkg.com/alpinejs" defer></script>
+  <title>EnDeCrypt</title>
 </head>
-
 <body>
 
 
   <nav class="bg-blue-500" aria-label="Global">
-    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+    <div class="max-w-7xl mx-auto px-2">
       <div class="flex justify-between h-16">
-        <div class="flex items-center px-2 lg:px-0">
-          <div class="flex-shrink-0 flex items-center">
-            <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-white.svg" alt="Workflow">
-          </div>
-          <div class="hidden lg:ml-8 lg:flex lg:space-x-4">
-            <a href="#" class="rounded-md py-2 px-3 text-sm font-medium text-white hover:bg-sky-400">
-              Dashboard
+        <div class="flex items-center">
+          <div class="hidden lg:flex">
+            <a href="#" class="rounded-md p-2 text-sm font-medium text-white hover:bg-sky-400">
+              EnDeCrypt
             </a>
           </div>
         </div>
@@ -31,14 +28,14 @@
     <div class="lg:hidden" id="mobile-menu">
       <div class="pt-2 pb-3 px-2 space-y-1">
         <a href="#"
-          class="block rounded-md py-2 px-3 text-base font-medium text-white hover:text-white hover:bg-sky-400">Dashboard</a>
+          class="block rounded-md py-2 px-3 text-base font-medium text-white hover:text-white hover:bg-sky-400">EnDeCrypt</a>
       </div>
     </div>
   </nav>
 
   <main class="max-w-7xl mx-auto pt-10 pb-12 px-4 lg:pb-16" x-data="ende()">
     <form>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid md:grid-cols-3 gap-4">
 
         <div>
           <h1 class="text-lg leading-6 font-medium text-gray-900">
@@ -60,11 +57,29 @@
           <p class="mt-1 text-sm text-gray-500">
             the frequency analysis of single characters
           </p>
-          <div class="mt-1">
-            list <br />
-            is <br />
-            here <br />
+          <div class="mt-1 grid grid-cols-2 gap-2 text-sm">
+            <div>
+              <span>Single Characters</span>
+
+              <template x-for="(char, index) in single_characters" :key="'sc-'+index">
+                <div class="flex flex-row justify-between items-center">
+                  <strong class="uppercase font-semibold" x-text="char.character"></strong>
+                  <span x-text="make_single_count_text(char.count)"></span>
+                </div>
+              </template>
+            </div>
+            <div>
+              <span>Double Characters</span>
+
+              <template x-for="(char, index) in double_characters" :key="'dc-'+index">
+                <div class="flex flex-row justify-between items-center">
+                  <strong class="uppercase font-semibold" x-text="char.character"></strong>
+                  <span x-text="make_double_count_text(char.count)"></span>
+                </div>
+              </template>
+            </div>
           </div>
+
         </div>
 
         <div>
@@ -95,6 +110,7 @@
               </div>
               <div class="flex-grow">
                 <input type="text" name="new_output_key" id="new-output-key" x-model="new_cipher_output"
+                  @keyup.enter="add_cipher()"
                   class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
                   placeholder="output">
               </div>
@@ -152,12 +168,14 @@
 
             <button type="button" @click="run_endecrypt()"
               class="bg-white inline-flex items-center px-4 py-2 mt-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-              <svg class="w-5 h-5 text-gray-400 -ml-2 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+              <svg class="w-5 h-5 text-gray-400 -ml-2 mr-1" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                  clip-rule="evenodd"></path>
+              </svg>
               <span>Run</span>
             </button>
-
-
-
 
           </div>
         </div>
@@ -188,7 +206,8 @@
                     <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                        clip-rule="evenodd"></path>
+                        clip-rule="evenodd">
+                      </path>
                     </svg>
                   </button>
                 </span>
@@ -213,6 +232,8 @@
         new_cipher_input: '',
         new_cipher_output: '',
         display_untouched_chars: true,
+        single_characters: [],
+        double_characters: [],
         add_cipher() {
           cipher = {
             input: this.new_cipher_input,
@@ -222,6 +243,7 @@
           this.new_cipher_input = '';
           this.new_cipher_output = '';
           this.run_endecrypt();
+          document.getElementById("new-input-key").focus();
         },
         remove_cipher(index) {
           this.ciphers.splice(index, 1);
@@ -233,17 +255,75 @@
         },
         analyse() {
           // Check frequency of characters
+          this.single_characters = [];
+          this.double_characters = [];
 
-          // Check frequency of character groupings
+          for (var i = 0; i < this.input.length; i++) {
+
+            var single_char = this.input.charAt(i).toUpperCase();
+            if (single_char != " ") {
+              this.add_single_char(single_char);
+
+              if (i < this.input.length - 1 && this.input.charAt(i + 1) != " ") {
+                var double_char = this.input.charAt(i).toUpperCase() + this.input.charAt(i + 1).toUpperCase();
+                this.add_double_char(double_char);
+              }
+            }
+          }
+          this.sort_single_chars();
+          this.sort_double_chars();
+        },
+        add_single_char(input) {
+          if (Array.isArray(this.single_characters)) {
+            if (this.single_characters.length > 0) {
+              for (var i = 0; i < this.single_characters.length; i++) {
+                if (this.single_characters[i].character == input) {
+                  this.single_characters[i].count++;
+                  return;
+                }
+              }
+            }
+
+            this.single_characters.push({
+              character: input,
+              count: 1,
+            });
+          }
+        },
+        make_single_count_text(count) {
+          return count + " (" + Math.round(count*1000/this.input.length)/10 + "%)";
+        },
+        sort_single_chars() {
+         this.single_characters = this.single_characters.sort((a, b) => b.count - a.count);
+        },
+        add_double_char(input) {
+          if (Array.isArray(this.double_characters)) {
+            if (this.double_characters.length > 0) {
+              for (var i = 0; i < this.double_characters.length; i++) {
+                if (this.double_characters[i].character == input) {
+                  this.double_characters[i].count++;
+                  return;
+                }
+              }
+            }
+
+            this.double_characters.push({
+              character: input,
+              count: 1,
+            });
+          }
+        },
+        make_double_count_text(count) {
+          return count + " (" + Math.round(count*1000/this.input.length-1)/10 + "%)";
+        },
+        sort_double_chars() {
+          this.double_characters = this.double_characters.sort((a, b) => b.count - a.count);
         },
         make_output() {
           var new_output = "";
-          
-          for (var i = 0; i< this.input.length; i++) {
+          for (var i = 0; i < this.input.length; i++) {
             new_output += this.find_key(this.input.charAt(i).toLowerCase());
           }
-
-
           this.output = new_output;
         },
         find_key(input) {
@@ -268,7 +348,14 @@
           }
         },
         reverse_keys() {
+          for (var i = 0; i < this.ciphers.length; i++) {
+            var old_in = this.ciphers[i].input;
+            var old_out = this.ciphers[i].output;
 
+            this.ciphers[i].output = old_in;
+            this.ciphers[i].input = old_out;
+
+          }
         }
 
       }
