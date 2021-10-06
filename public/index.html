@@ -36,7 +36,7 @@
     </div>
   </nav>
 
-  <main class="max-w-7xl mx-auto pt-10 pb-12 px-4 lg:pb-16" x-data="{ input: '', output: ''}">
+  <main class="max-w-7xl mx-auto pt-10 pb-12 px-4 lg:pb-16" x-data="ende()">
     <form>
       <div class="grid grid-cols-3 gap-4">
 
@@ -48,7 +48,7 @@
             The string to process
           </p>
           <div class="mt-1">
-            <textarea id="input" name="input" rows="20" x-model="input"
+            <textarea id="input" name="input" rows="20" x-model="input" @keyup="run_endecrypt"
               class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border border-gray-300 rounded-md"></textarea>
           </div>
         </div>
@@ -75,12 +75,10 @@
             The modified string
           </p>
           <div class="mt-1">
-            <textarea id="output" name="output" rows="20" x-model="input"
+            <textarea id="output" name="output" rows="20" x-model="output"
               class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border border-gray-300 rounded-md"></textarea>
           </div>
         </div>
-
-        
 
 
 
@@ -89,29 +87,77 @@
             New Cipher Key
           </h1>
           <div class="mt-1">
-                <div class="flex space-x-2">
-                  <div class="flex-grow">
-                    <input type="text" name="new_input_key" id="new-input-key" x-model="newInputKey"
-                      class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
-                      placeholder="input">
-                  </div>
-                  <div class="flex-grow">
-                    <input type="text" name="new_output_key" id="new-output-key" x-model="newOutputKey"
-                      class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
-                      placeholder="output">
-                  </div>
-                  <span class="ml-3">
-                    <button type="button"
-                      class="bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                      <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                          clip-rule="evenodd" />
-                      </svg>
-                    </button>
-                  </span>
-                </div>
+            <div class="flex space-x-2">
+              <div class="flex-grow">
+                <input type="text" name="new_input_key" id="new-input-key" x-model="new_cipher_input"
+                  class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
+                  placeholder="input">
+              </div>
+              <div class="flex-grow">
+                <input type="text" name="new_output_key" id="new-output-key" x-model="new_cipher_output"
+                  class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
+                  placeholder="output">
+              </div>
+              <span class="ml-3">
+                <button type="button" @click="add_cipher()"
+                  class="bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                      d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </span>
+            </div>
+
+          </div>
+
+          <h1 class="text-lg leading-6 font-medium text-gray-900 mt-4">
+            Options
+          </h1>
+          <div class="mt-1 flex flex-col items-start">
+            <button type="button" @click="display_untouched_chars = !display_untouched_chars"
+              class="bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+              <svg x-show="display_untouched_chars" class="-ml-2 mr-1 w-5 h-5 text-green-500" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+                <path fill-rule="evenodd"
+                  d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              <svg x-show="!display_untouched_chars" class="-ml-2 mr-1 w-5 h-5 text-yellow-500" fill="currentColor"
+                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                  d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+                  clip-rule="evenodd"></path>
+                <path
+                  d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z">
+                </path>
+              </svg>
+              <span x-show="display_untouched_chars">Displaying Unchanged Characters</span>
+              <span x-show="!display_untouched_chars">Hiding Unchanged Characters</span>
+            </button>
+
+            <button type="button" @click="reverse_keys()"
+              class="bg-white inline-flex items-center px-4 py-2 mt-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+              <svg class="w-5 h-5 text-gray-400 -ml-2 mr-1" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M8 5a1 1 0 100 2h5.586l-1.293 1.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L13.586 5H8zM12 15a1 1 0 100-2H6.414l1.293-1.293a1 1 0 10-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L6.414 15H12z">
+                </path>
+              </svg>
+              <span>Reverse Keys</span>
+            </button>
+
+            <button type="button" @click="run_endecrypt()"
+              class="bg-white inline-flex items-center px-4 py-2 mt-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+              <svg class="w-5 h-5 text-gray-400 -ml-2 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+              <span>Run</span>
+            </button>
+
+
+
 
           </div>
         </div>
@@ -121,46 +167,117 @@
             Current Keys
           </h1>
           <div class="mt-1">
-              <!-- For loop will go here -->
-                <div class="flex space-x-2">
-                  <div class="flex-grow">
-                    <input type="text" name="new_input_key" id="new-input-key" x-model="newInputKey"
-                      class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
-                      placeholder="input">
-                  </div>
-                  <div class="flex-grow">
-                    <input type="text" name="new_output_key" id="new-output-key" x-model="newOutputKey"
-                      class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
-                      placeholder="output">
-                  </div>
-                  <span class="ml-3">
-                    <button type="button"
-                      class="bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
-                      <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                          clip-rule="evenodd" />
-                      </svg>
-                    </button>
-                  </span>
+            <!-- For loop will go here -->
+
+            <template x-for="(cipher, index) in ciphers" :key="index">
+
+              <div class="flex space-x-2">
+                <div class="flex-grow">
+                  <input type="text" name="new_input_key" id="new-input-key" x-model="cipher.input"
+                    class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
+                    placeholder="input">
                 </div>
-                <!-- END FOR LOOP -->
+                <div class="flex-grow">
+                  <input type="text" name="new_output_key" id="new-output-key" x-model="cipher.output"
+                    class="block w-full shadow-sm focus:ring-sky-500 focus:border-sky-500 sm:text-sm border-gray-300 rounded-md"
+                    placeholder="output">
+                </div>
+                <span class="ml-3">
+                  <button type="button" @click="remove_cipher(index)"
+                    class="bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500">
+                    <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                  </button>
+                </span>
+              </div>
+
+            </template>
+
 
           </div>
         </div>
-
-
-
-
-
-
-
-
-
       </div>
     </form>
   </main>
+
+
+  <script type="text/javascript">
+    function ende() {
+      return {
+        input: '',
+        output: '',
+        ciphers: [],
+        new_cipher_input: '',
+        new_cipher_output: '',
+        display_untouched_chars: true,
+        add_cipher() {
+          cipher = {
+            input: this.new_cipher_input,
+            output: this.new_cipher_output,
+          }
+          this.ciphers.push(cipher);
+          this.new_cipher_input = '';
+          this.new_cipher_output = '';
+          this.run_endecrypt();
+        },
+        remove_cipher(index) {
+          this.ciphers.splice(index, 1);
+          this.run_endecrypt();
+        },
+        run_endecrypt() {
+          this.analyse();
+          this.make_output();
+        },
+        analyse() {
+          // Check frequency of characters
+
+          // Check frequency of character groupings
+        },
+        make_output() {
+          var new_output = "";
+          
+          for (var i = 0; i< this.input.length; i++) {
+            new_output += this.find_key(this.input.charAt(i).toLowerCase());
+          }
+
+
+          this.output = new_output;
+        },
+        find_key(input) {
+          if (input == " ") {
+            return input;
+          }
+
+          if (Array.isArray(this.ciphers)) {
+            if (this.ciphers.length > 0) {
+              for (var i = 0; i < this.ciphers.length; i++) {
+                if (this.ciphers[i].input.toLowerCase() == input) {
+                  return this.ciphers[i].output;
+                }
+              }
+            }
+          }
+
+          if (this.display_untouched_chars) {
+            return input;
+          } else {
+            return ".";
+          }
+        },
+        reverse_keys() {
+
+        }
+
+      }
+    }
+  </script>
+
+
+
+
 
 
 </body>
