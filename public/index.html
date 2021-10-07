@@ -41,7 +41,7 @@
     </div>
   </nav>
 
-  <main class="max-w-7xl mx-auto pt-10 pb-12 px-4 lg:pb-16" x-data="ende()">
+  <main class="max-w-7xl mx-auto pt-10 pb-12 px-4 lg:pb-16" x-data="ende()" x-init="init">
     <form>
       <div class="grid md:grid-cols-3 gap-4">
 
@@ -241,12 +241,36 @@
         display_untouched_chars: true,
         single_characters: [],
         double_characters: [],
+        init() {
+          if (localStorage.getItem("ende_input") != null) {
+            this.input = localStorage.getItem('ende_input');
+          }
+          if (localStorage.getItem("ende_output") != null) {
+            this.output = localStorage.getItem('ende_output');
+          }
+          if (localStorage.getItem("ende_ciphers") != null) {
+            var state_ciphers = JSON.parse(localStorage.getItem("ende_ciphers"));
+            if (Array.isArray(state_ciphers)) {
+              this.ciphers = state_ciphers;
+            }
+          }
+          if (localStorage.getItem("ende_display_untouched_chars") != null) {
+            this.display_untouched_chars = localStorage.getItem('ende_display_untouched_chars');
+          }
+        },
+        save_state() {
+          localStorage.setItem('ende_input', this.input);
+          localStorage.setItem('ende_output', this.output);
+          localStorage.setItem('ende_display_untouched_chars', this.display_untouched_chars);
+
+          localStorage.setItem('ende_ciphers', JSON.stringify(this.ciphers));
+        },
         add_cipher() {
-          cipher = {
+
+          this.ciphers.push({
             input: this.new_cipher_input,
             output: this.new_cipher_output,
-          }
-          this.ciphers.push(cipher);
+          });
           this.new_cipher_input = '';
           this.new_cipher_output = '';
           this.run_endecrypt();
@@ -259,6 +283,7 @@
         run_endecrypt() {
           this.analyse();
           this.make_output();
+          this.save_state();
         },
         analyse() {
           // Check frequency of characters
